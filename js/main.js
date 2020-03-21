@@ -65,6 +65,15 @@ function hasSameColor(color, shape) {
   return shape.color === color;
 }
 
+function Text(text) {
+  ctx.font = "100px Helvetica";
+  ctx.fillStyle = text;
+  ctx.fillText(text,canvas.width/2,100);
+  setTimeout(() => {
+    ctx.clearRect(canvas.width/2,0,350,110);
+  }, 6300);
+}
+
 //creates an event listener
 canvas.addEventListener('click', (e) => {
   const mousePos = {
@@ -86,12 +95,15 @@ canvas.addEventListener('click', (e) => {
 
   //if shapes is active the alert its id
   if (shape) {
-    //  alert('click on circle: ' + shape.id);
-     var audio = new Audio("audio/Color"+shape.id+".mp3");
+    Text(shape.id);
+    
+    
+    var audio = new Audio("audio/Color"+shape.id+".mp3");
      audio.play();
   }
  });
 
+ 
 // function AudioFile(color) {
 //     console.log("audio/Color"+color+".mp3")
 //     var audio = new Audio("audio/Color"+color+".mp3");
