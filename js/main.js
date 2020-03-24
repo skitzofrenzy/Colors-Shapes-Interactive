@@ -1,3 +1,17 @@
+// //Sets Music Default Volume
+document.querySelector("#background-music").volume = 0.03;
+
+ //Code for Circle/Shapes Pop Up Title
+ function Text(text,textColor,canvasContext,canvasSelected,timer) {
+  canvasContext.font = "90px Helvetica";
+  canvasContext.fillStyle = textColor;
+  canvasContext.textAlign = "center";
+  canvasContext.fillText(text,canvasSelected.width/2,100);
+  setTimeout(() => canvasContext.clearRect(0,0,canvasSelected.width,100+19), timer);
+}
+
+//  ++++++++++++++++++       Canvas1 BEGIN    +++++++++++++++++++++++++++++++++++++++
+
 //this method of hit detection might not have been the best way to do hit dectection, but for the assignment is was compatible
 //because the objects are not dynamically created and the colors are specified before hand
 //Canvas 1
@@ -6,27 +20,19 @@ canvas.width = 800;
 canvas.height = 460;
 const ctx = canvas.getContext('2d');
 
-CanvasTitle1();
-
-
-
-
-// Canvas 3
-const canvasTri = document.querySelector('#canvas3');
-canvasTri.width = 800;
-canvasTri.height = 120;
-const ctxTri = canvasTri.getContext('2d');
-
 
 //Empty Object For Storing Other Objects
 const colorsHash = {};
+
 //Iterations is a major part of code, it tells the program how many circles to push out
-let iterations = 3;
-let radius = 70;
+
+
+
 
 //Cricle objects without ColorHashs
 // x : y is the starting position, radius is radius of circle, color is color
 // id is the main part of each object, not only  does is say what color the object represents but it is used as a string for the audio and also the display text
+let radius = 70;
 const xPositionsGain = 150; 
 const yCirclePosition = 220;
 const circles = [
@@ -37,29 +43,21 @@ const circles = [
     {id: ' Pink', x: 100, y: yCirclePosition, radius: radius, color: 'rgb(255,192,203)'},
 ];
 
-//for each color object created, if colorhash doesnt have a property as the coresponding circle color then, create one
-for (let index = 0; index < iterations; index++) {
-  while(true) {
-    if (!colorsHash[circles[index].color]) {colorsHash[circles[index].color] = circles[index];     break;}
+  //for each color object created, if colorhash doesnt have a property as the coresponding circle color then, create one
+  for (let index = 0; index < circles.length; index++) {
+    while(true) {
+      if (!colorsHash[circles[index].color]) {colorsHash[circles[index].color] = circles[index];     break;}
+    }
   }
-}
 
-//for each circle object created, draws cirles into the canvas and the hit canvas but uses the user color on the canvas and uses the colorkey for the hit canvas
-for (let index = 0; index < iterations; index++) {
-  ctx.beginPath();
-  ctx.arc(circles[index].x+xPositionsGain*index, circles[index].y, circles[index].radius, 0, 2 * Math.PI, false);
-  ctx.fillStyle = circles[index].color;
-  ctx.fill();
-}
-
-//creates an event listener
+    //creates an event listener
 canvas.addEventListener('click', (e) => {
-  console.log(e);
+  // console.log(e);
   const mousePos = {
     x: e.pageX - canvas.offsetLeft,
     y: e.pageY - canvas.offsetTop
   };
-  console.log(mousePos);
+  // console.log(mousePos);
   
 
   // grabs the image color in 1 pixel on the canvas at the position of the mouse click
@@ -78,17 +76,23 @@ canvas.addEventListener('click', (e) => {
     var audio = new Audio("audio/Color"+circle.id+".mp3");
     audio.play();
   }
+  
  });
 
-
- //Code for Circle/circle Color Title
- function Text(text,textColor,canvasContext,canvasSelected,timer) {
-  canvasContext.font = "90px Helvetica";
-  canvasContext.fillStyle = textColor;
-  canvasContext.textAlign = "center";
-  canvasContext.fillText(text,canvasSelected.width/2,100);
-  setTimeout(() => canvasContext.clearRect(0,0,canvasSelected.width,100+19), timer);
+function PlayColors(iterations) {
+  ctx.clearRect(0,150,canvas.width,150);
+  
+  //for each circle object created, draws cirles into the canvas and the hit canvas but uses the user color on the canvas and uses the colorkey for the hit canvas
+  for (let index = 0; index < iterations; index++) {
+    ctx.beginPath();
+    ctx.arc(circles[index].x+xPositionsGain*index, circles[index].y, circles[index].radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = circles[index].color;
+    ctx.fill();
+  }
 }
+
+PlayColors(3);
+CanvasTitle1();
 
  //Code For Color Title and Sub-Title
  function CanvasTitle1() {
@@ -111,11 +115,7 @@ canvas.addEventListener('click', (e) => {
   ctx.fillText("Click on a circle to PLAY",canvas.width/2,445);
 }
 
-
-
-// //Sets Music Default Volume
-document.querySelector("#background-music").volume = 0.03;
-
+//  ++++++++++++++++++       Canvas1 END     +++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -128,31 +128,14 @@ canvasDou.height = 600;
 const ctxDou = canvasDou.getContext('2d');
 CanvasTitle2();
 
+//An Array to hold all shape objects
 const shapes = [];
 
-// Add event listener for `click` events.
-canvasDou.addEventListener('click', function(e) {
-    const mousePos = {
-          x: e.pageX - canvasDou.offsetLeft,
-          y: e.pageY - canvasDou.offsetTop
-        };
-    console.log(mousePos.x, mousePos.y);
-    shapes.forEach((shape) => {
-        if (mousePos.y > shape.top && mousePos.y < shape.top + shape.height &&mousePos.x > shape.left &&mousePos.x < shape.left + shape.width) {
-            console.log(shape.id);
-            // alert('clicked an shape'+shape.id);
-            var audio = new Audio("audio/Shape"+shape.id+".mp3");
-            audio.play();
-            Text(shape.id,shape.color,ctxDou,canvasDou,1000);
-        }
-    });
-}, false);
-
-
+//fixed width and heights for objects
 const width = canvasDou.width/2-10,
 height = 205-10;
 
-// Add shape.
+// Add shape. id is a important part as it is used to reference shape title and audio file
 shapes.push(
   {
     colour: '#05EFFF',
@@ -218,6 +201,25 @@ shapes.push(
   }
 );
 
+// Add event listener for `click` events.
+canvasDou.addEventListener('click', function(e) {
+    const mousePos = {
+          x: e.pageX - canvasDou.offsetLeft,
+          y: e.pageY - canvasDou.offsetTop
+        };
+    // console.log(mousePos.x, mousePos.y);
+    shapes.forEach((shape) => {
+        if (mousePos.y > shape.top && mousePos.y < shape.top + shape.height &&mousePos.x > shape.left &&mousePos.x < shape.left + shape.width) {
+            // console.log(shape.id);
+            // alert('clicked an shape'+shape.id);
+            var audio = new Audio("audio/Shape"+shape.id+".mp3");
+            audio.play();
+            Text(shape.id,shape.color,ctxDou,canvasDou,1300);
+        }
+    });
+}, false);
+
+
 // Render shapes.
 shapes.forEach((shape) => {
     ctxDou.fillStyle = shape.colour;
@@ -247,3 +249,135 @@ function CanvasTitle2() {
 }
 //  ++++++++++++++++++       CanvasDou END  +++++++++++++++++++++++++++++++++++++++++
 
+
+
+
+//  ++++++++++++++++++       CanvasTri END  +++++++++++++++++++++++++++++++++++++++++
+// Canvas 3
+const canvasTri = document.querySelector('#canvas3');
+canvasTri.width = 800;
+canvasTri.height = 120;
+const ctxTri = canvasTri.getContext('2d');
+CanvasTitle3();
+//An Array to hold all shape objects
+const numbers = [];
+
+//fixed width and heights for objects
+const numbersWidth = canvasTri.width/5-10*5,
+numbersHeight = 110;
+
+// Add shape. id is a important part as it is used to reference shape title and audio file
+numbers.push(
+  {
+    colour: '#653F5F',
+    width: numbersWidth,
+    height: numbersHeight,
+    top: 5,
+    left: 5,
+    id:"1",
+    draw: function() {
+      ctxTri.font = "120px Helvetica";
+      ctxTri.fillStyle = "black";
+      ctxTri.textAlign = "center";
+      ctxTri.fillText(this.id,this.left+55,canvasTri.height/2+45);
+    }
+  },
+  {
+    colour: '#050FFF',
+    width: numbersWidth,
+    height: numbersHeight,
+    top: 5,
+    left: 120,
+    id:"2",
+    draw: function() {
+      ctxTri.font = "120px Helvetica";
+      ctxTri.fillStyle = "black";
+      ctxTri.textAlign = "center";
+      ctxTri.fillText(this.id,this.left+55,canvasTri.height/2+45);
+    }
+  },
+  {
+    colour: '#05EFFF',
+    width: numbersWidth,
+    height: numbersHeight,
+    top: 5,
+    left: 235,
+    id:"3",
+    draw: function() {
+      ctxTri.font = "120px Helvetica";
+      ctxTri.fillStyle = "black";
+      ctxTri.textAlign = "center";
+      ctxTri.fillText(this.id,this.left+55,canvasTri.height/2+45);
+    }
+  },
+  {
+    colour: '#050FFF',
+    width: numbersWidth,
+    height: numbersHeight,
+    top: 5,
+    left: 350,
+    id:"4",
+    draw: function() {
+      ctxTri.font = "120px Helvetica";
+      ctxTri.fillStyle = "black";
+      ctxTri.textAlign = "center";
+      ctxTri.fillText(this.id,this.left+55,canvasTri.height/2+45);
+    }
+  },
+  {
+    colour: '#653F5F',
+    width: numbersWidth,
+    height: numbersHeight,
+    top: 5,
+    left: 465,
+    id:"5",
+    draw: function() {
+      ctxTri.font = "120px Helvetica";
+      ctxTri.fillStyle = "black";
+      ctxTri.textAlign = "center";
+      ctxTri.fillText(this.id,this.left+55,canvasTri.height/2+45);
+    }
+  }
+);
+
+// Add event listener for `click` events.
+canvasTri.addEventListener('click', function(e) {
+  const mousePos = {
+        x: e.pageX - canvasTri.offsetLeft,
+        y: e.pageY - canvasTri.offsetTop
+      };
+  // console.log(mousePos.x, mousePos.y);
+  numbers.forEach((number) => {
+      if (mousePos.y > number.top && mousePos.y < number.top + number.height &&mousePos.x > number.left &&mousePos.x < number.left + number.width) {
+          // console.log(parseInt(number.id, 10));
+          PlayColors(parseInt(number.id, 10));
+          
+      }
+  });
+}, false);
+
+// Render shapes.
+numbers.forEach((number) => {
+  ctxTri.fillStyle = number.colour;
+  ctxTri.fillRect(number.left, number.top, number.width, number.height);
+  number.draw();
+});
+
+//Code For Color Title and Sub-Title
+function CanvasTitle3() {
+  ctxTri.font = "35px Helvetica";
+  ctxTri.fillStyle = "brown";
+  ctxTri.textAlign = "center";
+  ctxTri.fillText("Choose a",690,35);
+  ctxTri.fillText("number of",690,65);
+  ctxTri.font = "45px Helvetica";
+  ctxTri.fillText("CIRCLES",690,100);
+  ctxTri.beginPath();
+  ctxTri.rect(585,5,210,110);
+  ctxTri.strokeStyle = "red";
+  ctxTri.lineWidth = "5"
+  ctxTri.stroke();
+  ctxTri.closePath();
+}
+
+//  ++++++++++++++++++       CanvasTri END  +++++++++++++++++++++++++++++++++++++++++
