@@ -8,4 +8,4 @@ https://youtu.be/7eQBm-j8Ev0
 Method to detect color using getImageData
 https://medium.com/@lavrton/hit-region-detection-for-html5-canvas-and-how-to-listen-to-click-events-on-canvas-shapes-815034d7e9f8
 
-this method of hit detection wasn't a copy/paste, i learnt it from that source and recreated it to fit the project's requirements.
+NB: this method of hit detection wasn't a copy/paste, i learnt it from that source and recreated it to fit the project's requirements.
