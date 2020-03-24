@@ -1,5 +1,5 @@
 // //Sets Music Default Volume
-document.querySelector("#background-music").volume = 0.03;
+document.querySelector("#background-music").volume = 0.3;
 
  //Code for Circle/Shapes Pop Up Title
  function Text(text,textColor,canvasContext,canvasSelected,timer) {
